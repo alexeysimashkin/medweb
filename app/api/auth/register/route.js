@@ -1,17 +1,14 @@
-import { query, initDatabase } from '@/lib/db';
-import { hashPassword, signToken } from '@/lib/auth';
+import { query } from '../../../lib/db';
+import { hashPassword, signToken } from '../../../lib/auth';
 import { NextResponse } from 'next/server';
 
 export async function POST(req) {
   try {
-    // Убедимся, что БД инициализирована
-    await initDatabase();
-    
     const { fullName, specialization, email, password } = await req.json();
     
     const existing = await query('SELECT id FROM doctors WHERE email = $1', [email]);
     if (existing.rows.length > 0) {
-      return NextResponse.json({ error: 'Врач с таким Email уже существует' }, { status: 400 });
+      return NextResponse.json({ error: 'Врач уже существует' }, { status: 400 });
     }
 
     const hashed = hashPassword(password);
