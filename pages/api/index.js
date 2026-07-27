@@ -1,0 +1,95 @@
+export default function handler(req, res) {
+  const html = `<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏥 Medical MIS</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 500px; margin: 50px auto; padding: 20px; }
+        h1 { text-align: center; color: #333; }
+        .card { border: 1px solid #ddd; padding: 20px; margin-bottom: 20px; border-radius: 8px; background: #f9f9f9; }
+        input { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; }
+        .btn-api { background: #6c757d; }
+        .btn-register { background: #28a745; }
+        .btn-login { background: #007bff; }
+        #message { margin-top: 20px; padding: 15px; background: #fff3cd; border-radius: 4px; border: 1px solid #ffc107; white-space: pre-wrap; }
+    </style>
+</head>
+<body>
+    <h1>🏥 Medical MIS</h1>
+    
+    <button class="btn-api" onclick="checkApi()">🔍 Проверить API</button>
+
+    <div class="card">
+        <h3>📝 Регистрация</h3>
+        <input id="regName" placeholder="Имя врача" />
+        <input id="regEmail" type="email" placeholder="Email" />
+        <input id="regPassword" type="password" placeholder="Пароль" />
+        <button class="btn-register" onclick="register()">Зарегистрироваться</button>
+    </div>
+
+    <div class="card">
+        <h3>🔑 Вход</h3>
+        <input id="loginEmail" type="email" placeholder="Email" />
+        <input id="loginPassword" type="password" placeholder="Пароль" />
+        <button class="btn-login" onclick="login()">Войти</button>
+    </div>
+
+    <div id="message"></div>
+
+    <script>
+        const showMessage = (text) => {
+            document.getElementById('message').textContent = text;
+        };
+
+        const checkApi = async () => {
+            try {
+                const res = await fetch('/api/hello');
+                const data = await res.json();
+                showMessage(JSON.stringify(data, null, 2));
+            } catch (e) {
+                showMessage('Ошибка: ' + e.message);
+            }
+        };
+
+        const register = async () => {
+            const name = document.getElementById('regName').value;
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPassword').value;
+            try {
+                const res = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ fullName: name, email, password })
+                });
+                const data = await res.json();
+                showMessage(JSON.stringify(data, null, 2));
+            } catch (e) {
+                showMessage('Ошибка: ' + e.message);
+            }
+        };
+
+        const login = async () => {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            try {
+                const res = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+                const data = await res.json();
+                showMessage(JSON.stringify(data, null, 2));
+            } catch (e) {
+                showMessage('Ошибка: ' + e.message);
+            }
+        };
+    </script>
+</body>
+</html>`;
+
+  res.setHeader('Content-Type', 'text/html');
+  res.status(200).send(html);
+}
