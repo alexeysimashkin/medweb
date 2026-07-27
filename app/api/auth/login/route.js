@@ -1,5 +1,5 @@
-import { query } from '@/lib/db';
-import { comparePassword, signToken } from '@/lib/auth';
+import { query } from '../../../lib/db';
+import { comparePassword, signToken } from '../../../lib/auth';
 import { NextResponse } from 'next/server';
 
 export async function POST(req) {
