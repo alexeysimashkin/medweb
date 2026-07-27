@@ -1,9 +1,8 @@
-import { query } from '@/lib/db';
+import { query } from '../../../lib/db';
 import { NextResponse } from 'next/server';
-import { verifyToken } from '@/lib/auth';
+import { verifyToken } from '../../../lib/auth';
 import { cookies } from 'next/headers';
 
-// Получение активных подписей врача
 export async function GET(req) {
   const cookieStore = cookies();
   const token = cookieStore.get('auth_token')?.value;
@@ -17,7 +16,6 @@ export async function GET(req) {
   return NextResponse.json(result.rows);
 }
 
-// Добавление новой ЭЦП
 export async function POST(req) {
   try {
     const cookieStore = cookies();
