@@ -9,47 +9,179 @@ export default function Home() {
   const [message, setMessage] = useState('');
 
   const register = async () => {
-    const res = await fetch('/api/auth/register', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ fullName: name, email, password })
-    });
-    const data = await res.json();
-    setMessage(JSON.stringify(data, null, 2));
+    try {
+      const res = await fetch('/api/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ fullName: name, email, password })
+      });
+      const data = await res.json();
+      setMessage(JSON.stringify(data, null, 2));
+    } catch (error) {
+      setMessage('Ошибка: ' + error.message);
+    }
   };
 
   const login = async () => {
-    const res = await fetch('/api/auth/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password })
-    });
-    const data = await res.json();
-    setMessage(JSON.stringify(data, null, 2));
+    try {
+      const res = await fetch('/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
+      const data = await res.json();
+      setMessage(JSON.stringify(data, null, 2));
+    } catch (error) {
+      setMessage('Ошибка: ' + error.message);
+    }
   };
 
   return (
-    <div style={{ padding: '20px', maxWidth: '400px', margin: 'auto' }}>
-      <h1>🏥 Medical MIS</h1>
+    <div style={{ 
+      padding: '20px', 
+      maxWidth: '400px', 
+      margin: '50px auto',
+      fontFamily: 'Arial, sans-serif'
+    }}>
+      <h1 style={{ textAlign: 'center', marginBottom: '30px' }}>🏥 Medical MIS</h1>
       
-      <div style={{ marginBottom: '20px', border: '1px solid #ccc', padding: '15px' }}>
-        <h3>Регистрация</h3>
-        <input style={{ width: '100%', padding: '10px', marginBottom: '10px' }} placeholder="Имя" onChange={(e) => setName(e.target.value)} />
-        <input style={{ width: '100%', padding: '10px', marginBottom: '10px' }} placeholder="Email" onChange={(e) => setEmail(e.target.value)} />
-        <input style={{ width: '100%', padding: '10px', marginBottom: '10px' }} placeholder="Пароль" type="password" onChange={(e) => setPassword(e.target.value)} />
-        <button onClick={register} style={{ width: '100%', padding: '10px', background: 'green', color: 'white', border: 'none' }}>Зарегистрироваться</button>
+      {/* РЕГИСТРАЦИЯ */}
+      <div style={{ 
+        marginBottom: '20px', 
+        border: '1px solid #ddd', 
+        padding: '20px', 
+        borderRadius: '8px',
+        background: '#f9f9f9'
+      }}>
+        <h3 style={{ marginTop: 0 }}>📝 Регистрация</h3>
+        <input 
+          style={{ 
+            width: '100%', 
+            padding: '10px', 
+            marginBottom: '10px', 
+            border: '1px solid #ddd',
+            borderRadius: '4px',
+            boxSizing: 'border-box'
+          }} 
+          placeholder="Имя врача" 
+          value={name}
+          onChange={(e) => setName(e.target.value)} 
+        />
+        <input 
+          style={{ 
+            width: '100%', 
+            padding: '10px', 
+            marginBottom: '10px', 
+            border: '1px solid #ddd',
+            borderRadius: '4px',
+            boxSizing: 'border-box'
+          }} 
+          placeholder="Email" 
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)} 
+        />
+        <input 
+          style={{ 
+            width: '100%', 
+            padding: '10px', 
+            marginBottom: '10px', 
+            border: '1px solid #ddd',
+            borderRadius: '4px',
+            boxSizing: 'border-box'
+          }} 
+          placeholder="Пароль" 
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)} 
+        />
+        <button 
+          onClick={register} 
+          style={{ 
+            width: '100%', 
+            padding: '12px', 
+            background: '#28a745', 
+            color: 'white', 
+            border: 'none',
+            borderRadius: '4px',
+            fontSize: '16px',
+            cursor: 'pointer'
+          }}
+        >
+          Зарегистрироваться
+        </button>
       </div>
 
-      <div style={{ border: '1px solid #ccc', padding: '15px' }}>
-        <h3>Вход</h3>
-        <input style={{ width: '100%', padding: '10px', marginBottom: '10px' }} placeholder="Email" onChange={(e) => setEmail(e.target.value)} />
-        <input style={{ width: '100%', padding: '10px', marginBottom: '10px' }} placeholder="Пароль" type="password" onChange={(e) => setPassword(e.target.value)} />
-        <button onClick={login} style={{ width: '100%', padding: '10px', background: 'blue', color: 'white', border: 'none' }}>Войти</button>
+      {/* ВХОД */}
+      <div style={{ 
+        marginBottom: '20px', 
+        border: '1px solid #ddd', 
+        padding: '20px', 
+        borderRadius: '8px',
+        background: '#f9f9f9'
+      }}>
+        <h3 style={{ marginTop: 0 }}>🔑 Вход</h3>
+        <input 
+          style={{ 
+            width: '100%', 
+            padding: '10px', 
+            marginBottom: '10px', 
+            border: '1px solid #ddd',
+            borderRadius: '4px',
+            boxSizing: 'border-box'
+          }} 
+          placeholder="Email" 
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)} 
+        />
+        <input 
+          style={{ 
+            width: '100%', 
+            padding: '10px', 
+            marginBottom: '10px', 
+            border: '1px solid #ddd',
+            borderRadius: '4px',
+            boxSizing: 'border-box'
+          }} 
+          placeholder="Пароль" 
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)} 
+        />
+        <button 
+          onClick={login} 
+          style={{ 
+            width: '100%', 
+            padding: '12px', 
+            background: '#007bff', 
+            color: 'white', 
+            border: 'none',
+            borderRadius: '4px',
+            fontSize: '16px',
+            cursor: 'pointer'
+          }}
+        >
+          Войти
+        </button>
       </div>
 
+      {/* РЕЗУЛЬТАТ */}
       {message && (
-        <div style={{ marginTop: '20px', background: '#f0f0f0', padding: '10px', borderRadius: '4px' }}>
-          <pre style={{ margin: 0, whiteSpace: 'pre-wrap' }}>{message}</pre>
+        <div style={{ 
+          marginTop: '20px', 
+          background: '#fff3cd', 
+          padding: '15px', 
+          borderRadius: '4px',
+          border: '1px solid #ffc107'
+        }}>
+          <pre style={{ 
+            margin: 0, 
+            whiteSpace: 'pre-wrap',
+            wordBreak: 'break-all'
+          }}>
+            {message}
+          </pre>
         </div>
       )}
     </div>
