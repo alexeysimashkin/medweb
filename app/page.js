@@ -7,8 +7,10 @@ export default function Home() {
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [message, setMessage] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const register = async () => {
+    setLoading(true);
     try {
       const res = await fetch('/api/register', {
         method: 'POST',
@@ -19,10 +21,13 @@ export default function Home() {
       setMessage(JSON.stringify(data, null, 2));
     } catch (error) {
       setMessage('Ошибка: ' + error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   const login = async () => {
+    setLoading(true);
     try {
       const res = await fetch('/api/login', {
         method: 'POST',
@@ -33,16 +38,21 @@ export default function Home() {
       setMessage(JSON.stringify(data, null, 2));
     } catch (error) {
       setMessage('Ошибка: ' + error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   const checkApi = async () => {
+    setLoading(true);
     try {
       const res = await fetch('/api/hello');
       const data = await res.json();
       setMessage(JSON.stringify(data, null, 2));
     } catch (error) {
       setMessage('Ошибка: ' + error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -55,23 +65,25 @@ export default function Home() {
     }}>
       <h1 style={{ textAlign: 'center' }}>🏥 Medical MIS</h1>
       
-      <div style={{ marginBottom: '10px' }}>
-        <button 
-          onClick={checkApi}
-          style={{ 
-            width: '100%', 
-            padding: '10px', 
-            background: '#6c757d', 
-            color: 'white', 
-            border: 'none',
-            borderRadius: '4px',
-            cursor: 'pointer'
-          }}
-        >
-          🔍 Проверить API (/api/hello)
-        </button>
-      </div>
+      {/* Кнопка проверки API */}
+      <button 
+        onClick={checkApi}
+        disabled={loading}
+        style={{ 
+          width: '100%', 
+          padding: '10px', 
+          marginBottom: '20px',
+          background: '#6c757d', 
+          color: 'white', 
+          border: 'none',
+          borderRadius: '4px',
+          cursor: 'pointer'
+        }}
+      >
+        {loading ? '⏳ Загрузка...' : '🔍 Проверить API'}
+      </button>
       
+      {/* Регистрация */}
       <div style={{ 
         marginBottom: '20px', 
         border: '1px solid #ddd', 
@@ -101,7 +113,8 @@ export default function Home() {
           onChange={(e) => setPassword(e.target.value)} 
         />
         <button 
-          onClick={register} 
+          onClick={register}
+          disabled={loading}
           style={{ 
             width: '100%', 
             padding: '12px', 
@@ -113,10 +126,11 @@ export default function Home() {
             cursor: 'pointer'
           }}
         >
-          Зарегистрироваться
+          {loading ? '⏳ Загрузка...' : 'Зарегистрироваться'}
         </button>
       </div>
 
+      {/* Вход */}
       <div style={{ 
         border: '1px solid #ddd', 
         padding: '20px', 
@@ -139,7 +153,8 @@ export default function Home() {
           onChange={(e) => setPassword(e.target.value)} 
         />
         <button 
-          onClick={login} 
+          onClick={login}
+          disabled={loading}
           style={{ 
             width: '100%', 
             padding: '12px', 
@@ -151,10 +166,11 @@ export default function Home() {
             cursor: 'pointer'
           }}
         >
-          Войти
+          {loading ? '⏳ Загрузка...' : 'Войти'}
         </button>
       </div>
 
+      {/* Результат */}
       {message && (
         <div style={{ 
           marginTop: '20px', 
