@@ -1,9 +1,8 @@
-import { query } from '@/lib/db';
+import { query } from '../../../lib/db';
+import { verifyToken } from '../../../lib/auth';
 import { NextResponse } from 'next/server';
-import { verifyToken } from '@/lib/auth';
 import { cookies } from 'next/headers';
 
-// Получение списка приемов для врача
 export async function GET(req) {
   const cookieStore = cookies();
   const token = cookieStore.get('auth_token')?.value;
@@ -23,7 +22,6 @@ export async function GET(req) {
   return NextResponse.json(result.rows);
 }
 
-// Создание нового приема
 export async function POST(req) {
   try {
     const cookieStore = cookies();
@@ -44,7 +42,6 @@ export async function POST(req) {
       signatureId 
     } = body;
 
-    // Проверяем, что пациент существует
     const patientCheck = await query('SELECT id FROM patients WHERE id = $1', [patientId]);
     if (patientCheck.rows.length === 0) {
       return NextResponse.json({ error: 'Пациент не найден' }, { status: 404 });
@@ -62,7 +59,7 @@ export async function POST(req) {
         complaints, anamnesis, objectiveStatus,
         recommendations, diagnosisCode, diagnosisText,
         signatureId || null, 
-        !!signatureId // Если передан signatureId, ставим is_signed = true
+        !!signatureId
       ]
     );
 
