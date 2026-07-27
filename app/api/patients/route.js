@@ -1,4 +1,4 @@
-import { query } from '@/lib/db';
+import { query } from '../../../lib/db';
 import { NextResponse } from 'next/server';
 
 export async function GET(req) {
@@ -21,7 +21,6 @@ export async function POST(req) {
   try {
     const { fullName, cardNumber, gender, birthDate, phone } = await req.json();
     
-    // Проверка уникальности карты
     const existing = await query('SELECT id FROM patients WHERE card_number = $1', [cardNumber]);
     if (existing.rows.length > 0) {
       return NextResponse.json({ error: 'Номер карты уже существует' }, { status: 400 });
