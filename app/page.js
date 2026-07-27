@@ -7,10 +7,8 @@ export default function Home() {
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [message, setMessage] = useState('');
-  const [loading, setLoading] = useState(false);
 
   const register = async () => {
-    setLoading(true);
     try {
       const res = await fetch('/api/register', {
         method: 'POST',
@@ -21,13 +19,10 @@ export default function Home() {
       setMessage(JSON.stringify(data, null, 2));
     } catch (error) {
       setMessage('Ошибка: ' + error.message);
-    } finally {
-      setLoading(false);
     }
   };
 
   const login = async () => {
-    setLoading(true);
     try {
       const res = await fetch('/api/login', {
         method: 'POST',
@@ -38,21 +33,16 @@ export default function Home() {
       setMessage(JSON.stringify(data, null, 2));
     } catch (error) {
       setMessage('Ошибка: ' + error.message);
-    } finally {
-      setLoading(false);
     }
   };
 
   const checkApi = async () => {
-    setLoading(true);
     try {
       const res = await fetch('/api/hello');
       const data = await res.json();
       setMessage(JSON.stringify(data, null, 2));
     } catch (error) {
       setMessage('Ошибка: ' + error.message);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -65,10 +55,8 @@ export default function Home() {
     }}>
       <h1 style={{ textAlign: 'center' }}>🏥 Medical MIS</h1>
       
-      {/* Кнопка проверки API */}
       <button 
         onClick={checkApi}
-        disabled={loading}
         style={{ 
           width: '100%', 
           padding: '10px', 
@@ -80,10 +68,9 @@ export default function Home() {
           cursor: 'pointer'
         }}
       >
-        {loading ? '⏳ Загрузка...' : '🔍 Проверить API'}
+        🔍 Проверить API
       </button>
       
-      {/* Регистрация */}
       <div style={{ 
         marginBottom: '20px', 
         border: '1px solid #ddd', 
@@ -114,7 +101,6 @@ export default function Home() {
         />
         <button 
           onClick={register}
-          disabled={loading}
           style={{ 
             width: '100%', 
             padding: '12px', 
@@ -126,11 +112,10 @@ export default function Home() {
             cursor: 'pointer'
           }}
         >
-          {loading ? '⏳ Загрузка...' : 'Зарегистрироваться'}
+          Зарегистрироваться
         </button>
       </div>
 
-      {/* Вход */}
       <div style={{ 
         border: '1px solid #ddd', 
         padding: '20px', 
@@ -154,7 +139,6 @@ export default function Home() {
         />
         <button 
           onClick={login}
-          disabled={loading}
           style={{ 
             width: '100%', 
             padding: '12px', 
@@ -166,11 +150,10 @@ export default function Home() {
             cursor: 'pointer'
           }}
         >
-          {loading ? '⏳ Загрузка...' : 'Войти'}
+          Войти
         </button>
       </div>
 
-      {/* Результат */}
       {message && (
         <div style={{ 
           marginTop: '20px', 
